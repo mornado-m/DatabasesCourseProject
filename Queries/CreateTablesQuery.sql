@@ -11,8 +11,8 @@ go
 CREATE TABLE [Users]
 ( 
 	[user_id]            integer identity(1,1) NOT NULL ,
-	[login]              nvarchar(20)  NULL ,
-	[pass]               nvarchar(20)  NOT NULL ,
+	[login]              nvarchar(50)  NULL ,
+	[pass]               nvarchar(50)  NOT NULL ,
 	CONSTRAINT [XPKUser] PRIMARY KEY  CLUSTERED ([user_id] ASC)
 )
 go
@@ -36,8 +36,8 @@ CREATE TABLE [Departments]
 ( 
 	[department_id]      integer identity(1,1) NOT NULL ,
 	[name]               nvarchar(50)  NOT NULL ,
-	[location]           nvarchar(256)  NULL ,
-	[description]        nvarchar(256)  NULL ,
+	[location]           nvarchar(max)  NULL ,
+	[description]        nvarchar(max)  NULL ,
 	CONSTRAINT [XPKDepartment] PRIMARY KEY  CLUSTERED ([department_id] ASC)
 )
 go
@@ -46,7 +46,7 @@ CREATE TABLE [Transfers_Types]
 ( 
 	[transfers_type_id]  integer identity(1,1) NOT NULL ,
 	[name]               nvarchar(50)  NOT NULL ,
-	[description]        nvarchar(256)  NULL ,
+	[description]        nvarchar(max)  NULL ,
 	CONSTRAINT [XPKTransfers_Type] PRIMARY KEY  CLUSTERED ([transfers_type_id] ASC)
 )
 go
@@ -55,7 +55,7 @@ CREATE TABLE [Devices_Statuses]
 ( 
 	[devices_status_id]  integer identity(1,1) NOT NULL ,
 	[name]               nvarchar(50)  NOT NULL ,
-	[description]        nvarchar(256)  NULL ,
+	[description]        nvarchar(max)  NULL ,
 	CONSTRAINT [XPKDevices_Status] PRIMARY KEY  CLUSTERED ([devices_status_id] ASC)
 )
 go
@@ -95,9 +95,9 @@ CREATE TABLE [Transfers]
 	[transfer_id]        integer identity(1,1) NOT NULL ,
 	[transfers_type_id]  integer  NOT NULL ,
 	[device_id]          integer  NOT NULL ,
-	[date]               datetime  NULL ,
+	[transfer_date]      datetime  NULL ,
 	[cost]               money  NULL ,
-	[description]        nvarchar(256)  NULL ,
+	[description]        nvarchar(max)  NULL ,
 	[user_id]            integer  NOT NULL ,
 	CONSTRAINT [XPKTransfer] PRIMARY KEY  CLUSTERED ([transfer_id] ASC),
 	CONSTRAINT [R_17] FOREIGN KEY ([transfers_type_id]) REFERENCES [Transfers_Types]([transfers_type_id])
@@ -139,17 +139,17 @@ CREATE TABLE [Transfer_Departments]
 )
 go
 
-CREATE TABLE [Managers]
+CREATE TABLE [Employees]
 ( 
-	[manager_id]         integer identity(1,1) NOT NULL ,
+	[employee_id]         integer identity(1,1) NOT NULL ,
 	[department_id]      integer  NOT NULL ,
-	[first_name]         nvarchar(20)  NOT NULL ,
-	[last_name]          nvarchar(20)  NOT NULL ,
+	[first_name]         nvarchar(50)  NOT NULL ,
+	[last_name]          nvarchar(50)  NOT NULL ,
 	[address]            nvarchar(50)  NULL ,
 	[tel]                nvarchar(12)  NULL ,
 	[dob]                datetime  NULL ,
 	[user_id]            integer  NOT NULL ,
-	CONSTRAINT [XPKManager] PRIMARY KEY  CLUSTERED ([manager_id] ASC),
+	CONSTRAINT [XPKEmployee] PRIMARY KEY  CLUSTERED ([employee_id] ASC),
 	CONSTRAINT [R_7] FOREIGN KEY ([department_id]) REFERENCES [Departments]([department_id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION,
@@ -163,7 +163,7 @@ CREATE TABLE [Attributes_Types]
 ( 
 	[attributes_type_id] integer identity(1,1) NOT NULL ,
 	[name]               nvarchar(50)  NOT NULL ,
-	[units_of_measurement] nvarchar(20)  NULL ,
+	[units_of_measurement] nvarchar(50)  NULL ,
 	CONSTRAINT [XPKAttributes_Type] PRIMARY KEY  CLUSTERED ([attributes_type_id] ASC)
 )
 go

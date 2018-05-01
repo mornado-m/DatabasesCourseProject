@@ -6,12 +6,13 @@ INSERT INTO Devices_Statuses (name, description) VALUES
 ('Проданий', ''),
 ('Списаний', '');
 
-INSERT INTO Transfers_Types (name, description) VALUES 
+INSERT INTO Transfers_Types (name, description) VALUES
 ('Купівля', ''),
 ('Переміщення', ''),
 ('Здача в ремонт', ''),
 ('Продаж', ''),
-('Списання', '');
+('Списання', ''),
+('Зміна параметрів', '');
 
 INSERT INTO Transfer_Department_Roles (name) VALUES 
 ('Відділ-джерело'),
@@ -37,7 +38,7 @@ INSERT INTO Departments (name, location) VALUES
 ('Маркетингу', 'м. Львів, вул. Городоцька 8'),
 ('Охорони', 'м. Львів, вул. Городоцька 7');
 
-INSERT INTO Managers (department_id, first_name, last_name, address, tel, dob, user_id) VALUES 
+INSERT INTO Employees (department_id, first_name, last_name, address, tel, dob, user_id) VALUES 
 (1, 'Людовік', 'Годовий', 'м. Львів, вул. Степана Бандери 14', '380635478123', '1996-06-06', 1),
 (2, 'Андрій', 'Головерда', 'м. Львів, вул. Люблінська 23', '380671234567', '1975-07-24', 2),
 (2, 'Ісус', 'Радзюк', 'м. Львів, вул. Кульпарківська 37', '380707010000', '1985-01-07', 3);
@@ -350,7 +351,7 @@ INSERT INTO Attributes (device_id, attributes_type_id, val) VALUES
 (29, 11, 'Lenovo'),
 (29, 12, 'Y600');
 
-INSERT INTO Transfers(device_id, transfers_type_id, cost, date, description, user_id) VALUES 
+INSERT INTO Transfers(device_id, transfers_type_id, cost, transfer_date, description, user_id) VALUES 
 (1, 1, 650, '2016-06-10', 'Придбано в Terratm.', 1),
 (2, 1, 650, '2016-06-10', 'Придбано в Terratm.', 1),
 (3, 1, 650, '2016-06-10', 'Придбано в Terratm.', 1),

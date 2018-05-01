@@ -1,0 +1,11 @@
+DROP PROCEDURE AddNewDevice
+DROP TYPE dbo.DeviceAttributesList
+DROP PROCEDURE MoveDevice
+DROP PROCEDURE MoveToRestoreDevice
+DROP PROCEDURE MoveFromRestoreDevice
+DROP PROCEDURE SaleDevice
+DROP PROCEDURE RemoveDevice
+DROP PROCEDURE SetDeviceIsBroken
+DROP PROCEDURE SetDeviceCannotRestore
+DROP PROCEDURE SetDeviceNewAttributeVal
+DROP PROCEDURE SetDeviceAttributeVal

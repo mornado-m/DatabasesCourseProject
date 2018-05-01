@@ -1,7 +1,7 @@
 drop TABLE [Attributes]
 drop TABLE [Device_Type_Attributes]
 drop TABLE [Attributes_Types]
-drop TABLE [Managers]
+drop TABLE [Employees]
 drop TABLE [Transfer_Departments]
 drop TABLE [Transfer_Department_Roles]
 drop TABLE [Transfers]
