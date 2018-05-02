@@ -1,5 +1,5 @@
 --Example
---SELECT * FROM GetDeviceAttribute(5, 1)
+--SELECT * FROM GetDeviceAttribute(5)
 
 CREATE FUNCTION GetDeviceAttribute (@dev_id int)
 RETURNS @res TABLE
@@ -48,6 +48,7 @@ GO
 CREATE FUNCTION GetAllDevices (@user_id int)
 RETURNS @res TABLE
 (
+	dev_id int,
 	device_type nvarchar(50), 
 	device_status nvarchar(50), 
 	device_dep nvarchar(50), 
@@ -61,8 +62,8 @@ BEGIN
 	DECLARE @perm_lvl int
 	SELECT @perm_lvl = r.permission_level FROM User_Roles ur JOIN Roles r ON ur.role_id = r.role_id AND ur.user_id = @user_id
 
-	INSERT INTO @res (device_type, device_status, device_dep, serial_num, Production_date, cost)
-	SELECT device_type, device_status, device_dep, serial_num, Production_date, cost FROM DevicesView WHERE (dev_id IN 
+	INSERT INTO @res (dev_id, device_type, device_status, device_dep, serial_num, Production_date, cost)
+	SELECT dev_id, device_type, device_status, device_dep, serial_num, Production_date, cost FROM DevicesView WHERE (dev_id IN 
 	(SELECT device_id FROM Devices WHERE department_id IN 
 	(SELECT department_id FROM Employees WHERE user_id = @user_id)) AND @perm_lvl IN (1, 2)) OR @perm_lvl = 3
 
@@ -74,6 +75,7 @@ GO
 CREATE FUNCTION GetAllTransfers (@user_id int)
 RETURNS @res TABLE
 ( 
+	tran_id int,
 	device_type nvarchar(50), 
 	serial_num nvarchar(50), 
 	transfer_type nvarchar(50), 
@@ -92,8 +94,8 @@ BEGIN
 	SELECT @perm_lvl = r.permission_level FROM User_Roles ur JOIN Roles r ON ur.role_id = r.role_id AND ur.user_id = @user_id
 
 	INSERT INTO @res 
-	(device_type, serial_num, transfer_type, first_dep_role, first_dep, second_dep_role, second_dep, [transfer_date], cost, [description])
-	SELECT device_type, serial_num, transfer_type, first_dep_role, first_dep, second_dep_role, second_dep, [transfer_date], cost, [description] FROM TransfersView WHERE tran_id IN 
+	(tran_id, device_type, serial_num, transfer_type, first_dep_role, first_dep, second_dep_role, second_dep, [transfer_date], cost, [description])
+	SELECT tran_id, device_type, serial_num, transfer_type, first_dep_role, first_dep, second_dep_role, second_dep, [transfer_date], cost, [description] FROM TransfersView WHERE tran_id IN 
 	(SELECT transfer_id FROM Transfers WHERE device_id IN
 	(SELECT device_id FROM Devices WHERE department_id IN 
 	(SELECT department_id FROM Employees WHERE user_id = @user_id)) AND @perm_lvl = 2) OR @perm_lvl = 3

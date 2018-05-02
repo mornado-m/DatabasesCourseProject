@@ -4,9 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevicesManager.Views"
-        mc:Ignorable="d" 
-        Title="MainWindowView" Height="300" Width="300" WindowStartupLocation="CenterScreen">
+        xmlns:cal2="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d" FontSize="14" Background="Wheat"
+        Title="" MinHeight="300" MinWidth="300" WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="20" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"
+              x:Name="Menu" Background="LightBlue" FontFamily="Segoe UI Black" FontSize="14"
+              ItemsSource="{Binding Items}">
+            <Menu.Resources>
+                <Style TargetType="MenuItem">
+                    <Setter Property="cal:Message.Attach" 
+                            Value="[Event Click] = [Action Select($DataContext)]" />
+                    <Setter Property="cal:Action.TargetWithoutContext" 
+                            Value="{Binding DataContext, ElementName=Menu}"/>
+                </Style>
+                <HierarchicalDataTemplate ItemsSource="{Binding Items}" 
+                                          DataType="{x:Type cal2:Screen}">
+                    <TextBlock Text="{Binding DisplayName}" Margin="10"/>
+                </HierarchicalDataTemplate>
+            </Menu.Resources>
+        </Menu>
+
+        <ContentControl Grid.Column="1" Grid.Row="2"
+                        x:Name="ActiveItem" />
     </Grid>
 </Window>
