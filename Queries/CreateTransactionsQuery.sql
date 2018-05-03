@@ -1,3 +1,13 @@
+--Example
+--DECLARE @attrs DeviceAttributesList;
+--INSERT INTO @attrs (attribute_type_id, val) VALUES 
+--(1, '8'),
+--(2, '1000'),
+--(3, '2.4'),
+--(4, '2'),
+--(8, 'Чорний'),
+--(11, 'ASUS');
+--EXEC AddNewDevice 1, 1, 750, 1010, '2015-10-10', '', 700, 1, @attrs
 CREATE TYPE dbo.DeviceAttributesList
 AS TABLE
 (
@@ -7,7 +17,7 @@ AS TABLE
 GO
 
 CREATE PROCEDURE AddNewDevice (@type_id int, @dept_id int, @dev_cost money, @serial_num int, @prod_date datetime, 
-@description nvarchar(max), @tran_cost money, @user_id int, @attributes as dbo.DeviceAttributesList READONLY)
+@description nvarchar(max), @tran_cost money, @tran_date datetime, @user_id int, @attributes as dbo.DeviceAttributesList READONLY)
 AS
 BEGIN
 	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
@@ -28,7 +38,7 @@ BEGIN
 
 			--Add transfer record
 			INSERT INTO Transfers (transfers_type_id, device_id, transfer_date, cost, description, user_id)
-			VALUES (1, @new_dev_id, GETDATE(), @tran_cost, @description, @user_id)
+			VALUES (1, @new_dev_id, @tran_date, @tran_cost, @description, @user_id)
 
 			--Add transfer dep
 			DECLARE @new_tran_id int;
@@ -90,12 +100,24 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 				
+			--Save old department id
+			DECLARE @old_dept_id int;
+			SELECT @old_dept_id = department_id FROM Devices WHERE device_id = @dev_id;
+
 			--Change device status
 			UPDATE Devices SET devices_status_id = 3 WHERE device_id = @dev_id;
 
 			--Add transfer record
 			INSERT INTO Transfers (transfers_type_id, device_id, transfer_date, cost, description, user_id)
 			VALUES (3, @dev_id, @date, @cost, @description, @user_id)
+
+			--Add transfer departments
+			DECLARE @new_tran_id int;
+			SET @new_tran_id = SCOPE_IDENTITY();
+			
+			--from
+			INSERT INTO Transfer_Departments (transfer_id, department_id, transfer_department_role_types_id)
+			VALUES (@new_tran_id, @old_dept_id, 1);
 			
 		COMMIT TRAN
 	END TRY
@@ -112,13 +134,25 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 				
+			--Save old department id
+			DECLARE @old_dept_id int;
+			SELECT @old_dept_id = department_id FROM Devices WHERE device_id = @dev_id;
+
 			--Change device status
 			UPDATE Devices SET devices_status_id = 1 WHERE device_id = @dev_id;
 
 			--Add transfer record
 			INSERT INTO Transfers (transfers_type_id, device_id, transfer_date, cost, description, user_id)
-			VALUES (2, @dev_id, GETDATE(), @cost, @description, @user_id)
+			VALUES (4, @dev_id, GETDATE(), @cost, @description, @user_id)
+						
+			--Add transfer departments
+			DECLARE @new_tran_id int;
+			SET @new_tran_id = SCOPE_IDENTITY();
 			
+			--where
+			INSERT INTO Transfer_Departments (transfer_id, department_id, transfer_department_role_types_id)
+			VALUES (@new_tran_id, @old_dept_id, 2);
+
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -134,13 +168,26 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 				
+			--Save old department id
+			DECLARE @old_dept_id int;
+			SELECT @old_dept_id = department_id FROM Devices WHERE device_id = @dev_id;
+
 			--Change device status
 			UPDATE Devices SET devices_status_id = 5 WHERE device_id = @dev_id;
 
 			--Add transfer record
 			INSERT INTO Transfers (transfers_type_id, device_id, transfer_date, cost, description, user_id)
-			VALUES (4, @dev_id, @date, @cost, @description, @user_id)
+			VALUES (5, @dev_id, @date, @cost, @description, @user_id)
 			
+			
+			--Add transfer departments
+			DECLARE @new_tran_id int;
+			SET @new_tran_id = SCOPE_IDENTITY();
+			
+			--from
+			INSERT INTO Transfer_Departments (transfer_id, department_id, transfer_department_role_types_id)
+			VALUES (@new_tran_id, @old_dept_id, 1);
+
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -155,14 +202,27 @@ BEGIN
 	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 	BEGIN TRY
 		BEGIN TRAN
-				
+			
+			--Save old department id
+			DECLARE @old_dept_id int;
+			SELECT @old_dept_id = department_id FROM Devices WHERE device_id = @dev_id;
+
 			--Change device status
 			UPDATE Devices SET devices_status_id = 6 WHERE device_id = @dev_id;
 
 			--Add transfer record
 			INSERT INTO Transfers (transfers_type_id, device_id, transfer_date, cost, description, user_id)
-			VALUES (5, @dev_id, @date, 0, @description, @user_id)
+			VALUES (6, @dev_id, @date, 0, @description, @user_id)
 			
+			
+			--Add transfer departments
+			DECLARE @new_tran_id int;
+			SET @new_tran_id = SCOPE_IDENTITY();
+			
+			--from
+			INSERT INTO Transfer_Departments (transfer_id, department_id, transfer_department_role_types_id)
+			VALUES (@new_tran_id, @old_dept_id, 1);
+
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -209,7 +269,7 @@ BEGIN
 
 			--Add transfer record
 			INSERT INTO Transfers (transfers_type_id, device_id, transfer_date, cost, description, user_id)
-			VALUES (6, @dev_id, @date, @cost, @description, @user_id)
+			VALUES (7, @dev_id, @date, @cost, @description, @user_id)
 			
 		COMMIT TRAN
 	END TRY

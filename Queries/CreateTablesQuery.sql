@@ -148,7 +148,7 @@ CREATE TABLE [Employees]
 	[address]            nvarchar(50)  NULL ,
 	[tel]                nvarchar(12)  NULL ,
 	[dob]                datetime  NULL ,
-	[user_id]            integer  NOT NULL ,
+	[user_id]            integer  NOT NULL UNIQUE,
 	CONSTRAINT [XPKEmployee] PRIMARY KEY  CLUSTERED ([employee_id] ASC),
 	CONSTRAINT [R_7] FOREIGN KEY ([department_id]) REFERENCES [Departments]([department_id])
 		ON DELETE NO ACTION

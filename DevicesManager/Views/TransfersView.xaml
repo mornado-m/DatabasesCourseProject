@@ -8,9 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -22,15 +20,16 @@
         </Grid.RowDefinitions>
 
         <!--Row 0-->
-        <TextBlock Grid.Column="0" Grid.Row="0" x:Name="Title" 
+        <TextBlock Grid.Column="0" Grid.Row="0" x:Name="Title" Grid.ColumnSpan="2"
                    Margin="5" FontFamily="Segoe UI Black" />
 
         <!--Row 1-->
-        <ScrollViewer Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
+        <ScrollViewer Grid.Column="0" Grid.Row="1"
                       MaxHeight="700">
             <DataGrid ItemsSource="{Binding Path=TransfersTable.DefaultView}"
                       AutoGenerateColumns="True" CanUserAddRows="False" 
-                      IsReadOnly="True" Margin="5" SelectionMode="Single">
+                      IsReadOnly="True" Margin="5" SelectionMode="Single"
+                      SelectedIndex="{Binding SelectedRowIdx}">
                 <DataGrid.Resources>
                     <Style TargetType="DataGrid">
                         <Setter Property="GridLinesVisibility" Value="All" />
@@ -80,5 +79,12 @@
                 </DataGrid.Resources>
             </DataGrid>
         </ScrollViewer>
+        <StackPanel Grid.Column="1" Grid.Row="1" Margin="20, 5">
+            <TextBlock Text="Oпис трансферу" Margin="5" 
+                       TextAlignment="Center" FontFamily="Segoe UI Black" />
+            <TextBlock x:Name="Description" MinHeight="400" MaxWidth="300"
+                       Margin="5" TextWrapping="Wrap" TextAlignment="Left"/>
+        </StackPanel>
+
     </Grid>
 </UserControl>

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
 using DevicesManager.Models;
 
@@ -15,20 +16,8 @@ namespace DevicesManager.ViewModels
         {
             DisplayName = "Параметри пристроїв";
             _model = model;
-            _title = _model.PermissionLevel > 2 ? "Характеристики пристроїв компанії" : "Параметри пристроїв вашого відділу";
-            var res = _model.GetAttributesTable();
-            
-            res.Columns[0].ColumnName = "Тип пристрою";
-            res.Columns[1].ColumnName = "Серійний номер";
-            res.Columns[2].ColumnName = "Відділ";
-            res.Columns[3].ColumnName = "Параметр";
-            res.Columns[4].ColumnName = "Значення";
-            res.Columns[5].ColumnName = "Одиниці вимірювання";
-
-            if (model.PermissionLevel < 3)
-                res.Columns.RemoveAt(2);
-
-            _attributesTable = res;
+            _deviceId = 1;
+            RefreshData();
         }
 
         private AttributesModel _model;
@@ -44,15 +33,53 @@ namespace DevicesManager.ViewModels
             }
         }
 
-        private string _title;
-        public string Title
+        private int _deviceId;
+        public int DeviceId
         {
-            get { return _title; }
+            get { return _deviceId; }
             set
             {
-                _title = value;
-                NotifyOfPropertyChange(() => Title);
+                _deviceId = value; 
+                NotifyOfPropertyChange(() => DeviceId);
             }
         }
+
+        public bool IsNormal => _model.GetDeviceStatus(DeviceId).Equals(1);
+
+        public bool IsBroken => _model.GetDeviceStatus(DeviceId).Equals(3);
+
+        public void RefreshData()
+        {
+            var res = _model.GetAttributesTable(DeviceId);
+
+            res.Columns[0].ColumnName = "Параметр";
+            res.Columns[1].ColumnName = "Значення";
+            res.Columns[2].ColumnName = "Одиниці вимірювання";
+
+            _attributesTable = res;
+            Refresh();
+        }
+
+        public void SetIsBroken()
+        {
+            if (MessageBox.Show("Встановити статус обраного пристрою як \"Потребує ремонту\"?", "Підтвердження.",
+                    MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                _model.SetDeviceIsBroken(DeviceId);
+                DataChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public void SetCannotRestore()
+        {
+            if (MessageBox.Show("Встановити статус обраного пристрою як \"Не підлягає ремонту\"?", "Підтвердження.",
+                    MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                _model.SetDeviceCannotRestore(DeviceId);
+                DataChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler DataChanged;
     }
 }

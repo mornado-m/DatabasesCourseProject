@@ -10,7 +10,6 @@ namespace DevicesManager.Models
 {
     class DevicesModel
     {
-
         public DevicesModel(int userId, int permissionLevel)
         {
             UserId = userId;

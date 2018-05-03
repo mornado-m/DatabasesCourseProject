@@ -41,5 +41,79 @@ namespace DevicesManager.Models
                 return res;
             }
         }
+
+        public DataTable GetAttributesTable(int deviceId)
+        {
+            using (SqlConnection connection = new SqlConnection(Constants.ConnectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = connection,
+                    CommandText = $"SELECT * FROM GetDeviceAttribute({deviceId})"
+                };
+
+                var res = new DataTable();
+                var da = new SqlDataAdapter(command);
+                da.Fill(res);
+
+                connection.Close();
+                da.Dispose();
+
+                return res;
+            }
+        }
+
+        public int GetDeviceStatus(int deviceId)
+        {
+            using (SqlConnection connection = new SqlConnection(Constants.ConnectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = connection,
+                    CommandText = $"SELECT devices_status_id FROM Devices WHERE device_id={deviceId}"
+                };
+
+                var res = new DataTable();
+                var da = new SqlDataAdapter(command);
+                da.Fill(res);
+
+                connection.Close();
+                da.Dispose();
+
+                return (int) res.Rows[0][0];
+            }
+        }
+
+        public void SetDeviceIsBroken(int deviceId)
+        {
+            using (SqlConnection connection = new SqlConnection(Constants.ConnectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = connection,
+                    CommandText = $"EXEC SetDeviceIsBroken {deviceId}"
+                };
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public void SetDeviceCannotRestore(int deviceId)
+        {
+            using (SqlConnection connection = new SqlConnection(Constants.ConnectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = connection,
+                    CommandText = $"EXEC SetDeviceCannotRestore {deviceId}"
+                };
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
     }
 }

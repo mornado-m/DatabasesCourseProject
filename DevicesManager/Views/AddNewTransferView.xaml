@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DevicesManager.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="350">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -18,18 +18,59 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!--Row 0-->
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Оберіть тип трансферу:" Margin="5" />
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Тип трансферу:" Margin="5" />
         <ComboBox Grid.Column="1" Grid.Row="0" Margin="5" 
                   ItemsSource="{Binding Path=TransferTypesList}"
                   SelectedIndex="{Binding Path=SelectedTypeIdx, Mode=TwoWay}" />
         
         <!--Row 1-->
-        <ContentControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
-                        x:Name="ActiveItem" />
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Пристрій:" Margin="5" />
+        <ComboBox Grid.Column="1" Grid.Row="1" Margin="5" 
+                  ItemsSource="{Binding Path=DevicesList}"
+                  SelectedIndex="{Binding Path=SelectedDeviceIdx, Mode=TwoWay}" />
+
+        <!--Row 2-->
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Відділ призначення:" Margin="5" 
+                   Visibility="{Binding Path=IsMoveTransfer, 
+                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <ComboBox Grid.Column="1" Grid.Row="2" Margin="5" 
+                  ItemsSource="{Binding Path=DepartmentsList}"
+                  SelectedIndex="{Binding Path=SelectedDepartmentIdx, Mode=TwoWay}"
+                  Visibility="{Binding Path=IsMoveTransfer, 
+                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <!--Row 3-->
+        <TextBlock Grid.Column="0" Grid.Row="3" 
+                   Text="Вартість переміщення:" Margin="5" />
+        <TextBox Grid.Column="1" Grid.Row="3" x:Name="Cost" Margin="5" MinWidth="100" />
+
+        <!--Row 4-->
+        <TextBlock Grid.Column="0" Grid.Row="4" 
+                   Text="Дата переміщення:" Margin="5" />
+        <Calendar Grid.Column="1" Grid.Row="4" Margin="5" SelectedDate="{Binding Date}" />
+
+        <!--Row 5-->
+        <TextBlock Grid.Column="0" Grid.Row="5" 
+                   Text="Опис:" Margin="5" />
+        <TextBox Grid.Column="1" Grid.Row="5" Margin="5"
+                 x:Name="Description" MinWidth="100" />
+
+        <!--Row 6-->
+        <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" 
+                x:Name="AddTransfer" Margin="5">
+            <Button.ContentTemplate>
+                <DataTemplate>
+                    <TextBlock Text="Оформити трансфер" Margin="5" />
+                </DataTemplate>
+            </Button.ContentTemplate>
+        </Button>
         
     </Grid>
 </UserControl>

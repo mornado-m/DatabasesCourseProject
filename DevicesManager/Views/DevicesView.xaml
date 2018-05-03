@@ -9,8 +9,6 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -22,15 +20,16 @@
         </Grid.RowDefinitions>
         
         <!--Row 0-->
-        <TextBlock Grid.Column="0" Grid.Row="0" x:Name="Title" 
+        <TextBlock Grid.Column="0" Grid.Row="0" x:Name="Title" Grid.ColumnSpan="2"
                    Margin="5" FontFamily="Segoe UI Black" />
         
         <!--Row 1-->
-        <ScrollViewer Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
+        <ScrollViewer Grid.Column="0" Grid.Row="1"
                       MaxHeight="700">
             <DataGrid ItemsSource="{Binding Path=DevicesTable.DefaultView}"
                       AutoGenerateColumns="True" CanUserAddRows="False" 
-                      IsReadOnly="True" Margin="5" SelectionMode="Single">
+                      IsReadOnly="True" Margin="5" SelectionMode="Single"
+                      SelectedIndex="{Binding SelectedRowIdx}">
                 <DataGrid.Resources>
                     <Style TargetType="DataGrid">
                         <Setter Property="GridLinesVisibility" Value="All" />
@@ -80,5 +79,8 @@
                 </DataGrid.Resources>
             </DataGrid>
         </ScrollViewer>
+
+        <ContentControl Grid.Column="1" Grid.Row="1" x:Name="ActiveItem" Margin="20, 0" />
+
     </Grid>
 </UserControl>

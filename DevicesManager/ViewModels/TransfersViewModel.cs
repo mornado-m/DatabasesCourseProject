@@ -16,6 +16,52 @@ namespace DevicesManager.ViewModels
             DisplayName = "Переміщення";
             _model = model;
             _title = _model.PermissionLevel > 2 ? "Переміщення всіх пристроїв компанії" : "Переміщення пристроїв вашого відділу";
+            RefreshData();
+        }
+
+        private DataTable _startTransfersTable;
+        private TransfersModel _model;
+
+        private DataTable _transfersTable;
+        public DataTable TransfersTable
+        {
+            get { return _transfersTable; }
+            private set
+            {
+                _transfersTable = value;
+                NotifyOfPropertyChange(() => TransfersTable);
+            }
+        }
+
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                NotifyOfPropertyChange(() => Title);
+            }
+        }
+
+        public string Description => _selectedRowIdx != -1 ? (string) _startTransfersTable.Rows[_selectedRowIdx][10] : "";
+
+        private int _selectedRowIdx;
+        public int SelectedRowIdx
+        {
+            get { return _selectedRowIdx; }
+            set
+            {
+                if (value < 0 || value >= _startTransfersTable.Rows.Count)
+                    return;
+                _selectedRowIdx = value;
+                NotifyOfPropertyChange(() => SelectedRowIdx);
+                NotifyOfPropertyChange(() => Description);
+            }
+        }
+
+        public void RefreshData()
+        {
             var res = _model.GetTransfersTable();
             _startTransfersTable = res.Clone();
             foreach (DataRow row in res.Rows)
@@ -49,31 +95,7 @@ namespace DevicesManager.ViewModels
             res.Columns.RemoveAt(0);
 
             _transfersTable = res;
-        }
-
-        private DataTable _startTransfersTable;
-        private TransfersModel _model;
-
-        private DataTable _transfersTable;
-        public DataTable TransfersTable
-        {
-            get { return _transfersTable; }
-            private set
-            {
-                _transfersTable = value;
-                NotifyOfPropertyChange(() => TransfersTable);
-            }
-        }
-
-        private string _title;
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                NotifyOfPropertyChange(() => Title);
-            }
+            Refresh();
         }
     }
 }

@@ -71,19 +71,25 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constants.cs" />
+    <Compile Include="Models\AddNewDeviceModel.cs" />
+    <Compile Include="Models\AddNewTransferModel.cs" />
     <Compile Include="Models\AttributesModel.cs" />
     <Compile Include="Models\DevicesModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PasswordHelper.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\TransfersModel.cs" />
+    <Compile Include="ViewModels\AddNewDeviceViewModel.cs" />
     <Compile Include="ViewModels\AddNewTransferViewModel.cs" />
     <Compile Include="ViewModels\AttributesViewModel.cs" />
     <Compile Include="ViewModels\DevicesViewModel.cs" />
-    <Compile Include="ViewModels\INewTransfer.cs" />
+    <Compile Include="ViewModels\DeviceTransferViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\TransfersViewModel.cs" />
+    <Compile Include="Views\AddNewDeviceView.xaml.cs">
+      <DependentUpon>AddNewDeviceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddNewTransferView.xaml.cs">
       <DependentUpon>AddNewTransferView.xaml</DependentUpon>
     </Compile>
@@ -92,6 +98,9 @@
     </Compile>
     <Compile Include="Views\DevicesView.xaml.cs">
       <DependentUpon>DevicesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeviceTransferView.xaml.cs">
+      <DependentUpon>DeviceTransferView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
@@ -133,6 +142,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Views\AddNewDeviceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddNewTransferView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +155,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DevicesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeviceTransferView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

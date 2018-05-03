@@ -9,11 +9,11 @@ using DevicesManager.Models;
 
 namespace DevicesManager.ViewModels
 {
-    class AddNewTransferViewModel : Screen
+    class DeviceTransferViewModel : Screen
     {
-        public AddNewTransferViewModel(AddNewTransferModel model)
+        public DeviceTransferViewModel(AddNewTransferModel model)
         {
-            DisplayName = "Оформити трансфер";
+            DisplayName = "Оформити перенесення пристрою";
             _model = model;
             RefreshData();
         }
@@ -21,32 +21,6 @@ namespace DevicesManager.ViewModels
         private AddNewTransferModel _model;
         private Dictionary<string, int> _devicesId;
         private Dictionary<string, int> _departmentsId;
-        private Dictionary<string, AddNewTransferModel.TransfersTypes> _transfersTypes;
-
-        private List<string> _transferTypesList;
-        public List<string> TransferTypesList
-        {
-            get { return _transferTypesList; }
-            set
-            {
-                _transferTypesList = value;
-                NotifyOfPropertyChange(() => TransferTypesList);
-            }
-        }
-
-        private int _selectedTypeIdx;
-        public int SelectedTypeIdx
-        {
-            get { return _selectedTypeIdx; }
-            set
-            {
-                if (value < 0 || value >= TransferTypesList.Count)
-                    return;
-                _selectedTypeIdx = value; 
-                NotifyOfPropertyChange(() => SelectedTypeIdx);
-                NotifyOfPropertyChange(() => IsMoveTransfer);
-            }
-        }
 
         private List<string> _devicesList;
         public List<string> DevicesList
@@ -67,16 +41,6 @@ namespace DevicesManager.ViewModels
             {
                 _selectedDeviceIdx = value;
                 NotifyOfPropertyChange(() => SelectedDeviceIdx);
-
-                _transfersTypes = _model.GetTransfersTypes(_devicesId[_devicesList[_selectedDeviceIdx]]);
-                _transferTypesList = new List<string>();
-                foreach (var transfer in _transfersTypes)
-                    _transferTypesList.Add(transfer.Key);
-                _selectedTypeIdx = 0;
-
-                NotifyOfPropertyChange(() => TransferTypesList);
-                NotifyOfPropertyChange(() => SelectedTypeIdx);
-                NotifyOfPropertyChange(() => IsMoveTransfer);
             }
         }
 
@@ -102,23 +66,9 @@ namespace DevicesManager.ViewModels
             }
         }
 
-        public bool IsMoveTransfer => _transfersTypes[_transferTypesList[_selectedTypeIdx]]
-            .Equals(AddNewTransferModel.TransfersTypes.Move);
-        
         public int DeviceId => _devicesId[_devicesList[_selectedDeviceIdx]];
-        
-        public int DeptId => _departmentsId[_departmentsList[_selectedDepartmentIdx]];
 
-        private decimal _cost;
-        public decimal Cost
-        {
-            get { return _cost; }
-            set
-            {
-                _cost = value;
-                NotifyOfPropertyChange(() => Cost);
-            }
-        }
+        public int DeptId => _departmentsId[_departmentsList[_selectedDepartmentIdx]];
 
         private DateTime _date;
         public DateTime Date
@@ -156,14 +106,7 @@ namespace DevicesManager.ViewModels
             foreach (var department in _departmentsId)
                 _departmentsList.Add(department.Key);
             _selectedDepartmentIdx = 0;
-
-            _transfersTypes = _model.GetTransfersTypes(_devicesId[_devicesList[_selectedDeviceIdx]]);
-            _transferTypesList = new List<string>();
-            foreach (var transfer in _transfersTypes)
-                _transferTypesList.Add(transfer.Key);
-            _selectedTypeIdx = 0;
-
-            _cost = 0;
+            
             _date = DateTime.Today;
             _description = "";
 
@@ -173,19 +116,17 @@ namespace DevicesManager.ViewModels
         public void AddTransfer()
         {
             _model.AddTransfer(
-                _transfersTypes[_transferTypesList[_selectedTypeIdx]],
+                AddNewTransferModel.TransfersTypes.Move,
                 DeviceId,
                 DeptId,
                 Date,
-                Cost,
+                0,
                 Description);
             MessageBox.Show("Трансфер успішно додано.", "Успіх!");
-            Cost = 0;
             Date = DateTime.Today;
             Description = "";
             SelectedDeviceIdx = 0;
             SelectedDepartmentIdx = 0;
-            SelectedTypeIdx = 0;
 
             TransferAdded?.Invoke(this, EventArgs.Empty);
         }

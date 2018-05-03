@@ -10,6 +10,7 @@ INSERT INTO Transfers_Types (name, description) VALUES
 ('Купівля', ''),
 ('Переміщення', ''),
 ('Здача в ремонт', ''),
+('Повернення з ремонту', ''),
 ('Продаж', ''),
 ('Списання', ''),
 ('Зміна параметрів', '');
@@ -388,7 +389,7 @@ INSERT INTO Transfers(device_id, transfers_type_id, cost, transfer_date, descrip
 (7, 2, 0, '2016-08-01', 'Перенесено по причині великого навантаження відділу маркетингу.', 1),
 (7, 2, 0, '2016-10-10', 'Повернення.', 2),
 (6, 3, 50, '2016-11-15', 'Здано на ремонт в Terratm.', 2),
-(11, 5, 0, '2017-02-3', 'Розбито.', 1),
+(11, 6, 0, '2017-02-3', 'Розбито.', 1),
 (14, 1, 350, '2017-02-10', 'Придбано в Terratm.', 1);
 
 INSERT INTO Transfer_Departments (transfer_id, department_id, transfer_department_role_types_id) VALUES 
